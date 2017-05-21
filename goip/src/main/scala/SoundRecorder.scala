@@ -3,17 +3,17 @@ import java.net.SocketException
 import javax.sound.sampled._
 
 /**
-  * Created by bade on 20.05.17..
+  * Created by bade on 21.05.17..
   */
-class SoundPlayer(inputStream: InputStream) {
+class SoundRecorder(outputStream: OutputStream) {
 
   private val format = SoundUtil.getAudioFormat
   @volatile private var stopped = false
 
-  val info = new DataLine.Info(classOf[SourceDataLine], format)
+  val info = new DataLine.Info(classOf[TargetDataLine], format)
   require(AudioSystem.isLineSupported(info), "The system does not support the specified format.")
 
-  private val audioLine = AudioSystem.getSourceDataLine(format)
+  private val audioLine = AudioSystem.getTargetDataLine(format)
 
   def start(): Unit = {
 
@@ -21,19 +21,23 @@ class SoundPlayer(inputStream: InputStream) {
     stopped = false
     audioLine.open()
     audioLine.start()
-    var numBytesRead = inputStream.read(audioBytes)
+
+    var numBytesRead = audioLine.read(audioBytes, 0, SoundUtil.BUFFER_SIZE)
 
     while (!stopped && numBytesRead != -1) {
-      audioLine.write(audioBytes, 0, numBytesRead)
       try {
-        numBytesRead = inputStream.read(audioBytes)
+        outputStream.write(audioBytes)
       } catch {
-        case e: SocketException => println("Closed connection")
+        case e: SocketException => {
+          println("Closed connection")
+          stop()
+        }
       }
+      numBytesRead = audioLine.read(audioBytes, 0, SoundUtil.BUFFER_SIZE)
     }
 
     audioLine.close()
-    inputStream.close()
+    outputStream.close()
   }
 
   def stop(): Unit = {
@@ -41,6 +45,10 @@ class SoundPlayer(inputStream: InputStream) {
 
     if (audioLine != null) {
       audioLine.drain()
+    }
+
+    if (outputStream != null) {
+      outputStream.flush()
     }
   }
 }
