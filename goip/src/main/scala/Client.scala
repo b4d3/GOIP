@@ -12,19 +12,31 @@ object Client extends App {
   val soundPlayer = new SoundPlayer(in)
   val soundRecorder = new SoundRecorder(out)
 
-  new Thread(new Runnable {
-    override def run(): Unit = soundPlayer.start()
-  }).start()
+  private def startConversation = {
+    new Thread(new Runnable {
+      override def run(): Unit = soundPlayer.start()
+    }).start()
 
-  new Thread(new Runnable {
-    override def run(): Unit = soundRecorder.start()
-  }).start()
-  
-//  Thread.sleep(2000)
-//  stopConversation
+    new Thread(new Runnable {
+      override def run(): Unit = soundRecorder.start()
+    }).start()
+  }
 
   private def stopConversation = {
     soundRecorder.stop()
     soundPlayer.stop()
   }
+
+  startConversation
+
+  Thread.sleep(2000)
+  stopConversation
+
+  startConversation
+
+  Thread.sleep(2000)
+  stopConversation
+
+  in.close()
+  out.close()
 }

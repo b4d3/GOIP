@@ -23,4 +23,7 @@ class Peer(port: Int) {
     override def run(): Unit = soundRecorder.start()
   }).start()
 
+  in.close()
+  out.close()
+
 }

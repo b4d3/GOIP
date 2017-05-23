@@ -9,6 +9,7 @@ class SoundPlayer(inputStream: InputStream) {
 
   private val format = SoundUtil.getAudioFormat
   @volatile private var stopped = false
+  private val audioBytes = new Array[Byte](SoundUtil.BUFFER_SIZE)
 
   val info = new DataLine.Info(classOf[SourceDataLine], format)
   require(AudioSystem.isLineSupported(info), "The system does not support the specified format.")
@@ -17,7 +18,6 @@ class SoundPlayer(inputStream: InputStream) {
 
   def start(): Unit = {
 
-    val audioBytes = new Array[Byte](SoundUtil.BUFFER_SIZE)
     stopped = false
     audioLine.open()
     audioLine.start()
@@ -31,9 +31,6 @@ class SoundPlayer(inputStream: InputStream) {
         case e: SocketException => println("Closed connection")
       }
     }
-
-    audioLine.close()
-    inputStream.close()
   }
 
   def stop(): Unit = {
@@ -41,6 +38,7 @@ class SoundPlayer(inputStream: InputStream) {
 
     if (audioLine != null) {
       audioLine.drain()
+      audioLine.close()
     }
   }
 }
