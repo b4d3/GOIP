@@ -18,6 +18,11 @@ namespace goip {
             //later on, callback mechanism will be added to allow the user of this api to reponds to the message
             //this method does not return until it receives message from client
             void expect_message();
+
+            //Creates a new thread and starts a infinite loop on that thread
+            //To be implemented later: user of the API will set a callback function to be called on each received message
+            void async_wait_for_message();
+
         private:
             boost::asio::io_service *io_service;
             boost::asio::ip::udp::endpoint *local_endpoint;

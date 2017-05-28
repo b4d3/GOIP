@@ -5,6 +5,13 @@
 
 using namespace goip;
 
+
+void handler(const boost::system::error_code& error, std::size_t bytes_transferred) {
+    // std::cout.write(recv_buf.data(), len);
+    std::cout <<"len is: " << bytes_transferred << std::endl;
+}
+
+
 simple_udp_server_provider::simple_udp_server_provider(int desired_port): 
         io_service{new boost::asio::io_service()},
         local_endpoint{new boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), desired_port)},
@@ -28,3 +35,9 @@ void simple_udp_server_provider::expect_message() {
     std::cout.write(recv_buf.data(), len);
   
 }
+
+void simple_udp_server_provider::async_wait_for_message() {
+    boost::array<char, 128> recv_buf;
+    socket->async_receive(boost::asio::buffer(recv_buf), handler);
+}
+
