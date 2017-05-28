@@ -15,15 +15,16 @@ simple_udp_server_provider::simple_udp_server_provider(int desired_port):
     //the server needs to receive a message from client to save that client info in the remote_endpoint variable
     boost::array<char, 1> recv_buf;
     socket->receive_from(boost::asio::buffer(recv_buf), *remote_endpoint);
+    socket->connect(*remote_endpoint);
 }
 
 void simple_udp_server_provider::send_message_to_client(std::string message) {
-    socket->send_to(boost::asio::buffer(message), *remote_endpoint);
+    socket->send(boost::asio::buffer(message));
 }
 
 void simple_udp_server_provider::expect_message() {
     boost::array<char, 128> recv_buf;
-    size_t len = socket->receive_from(boost::asio::buffer(recv_buf), *remote_endpoint);
+    size_t len = socket->receive(boost::asio::buffer(recv_buf));
     std::cout.write(recv_buf.data(), len);
   
 }

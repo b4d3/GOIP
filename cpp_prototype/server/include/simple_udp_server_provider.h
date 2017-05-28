@@ -5,7 +5,7 @@ namespace goip {
     class simple_udp_server_provider {
         public:
             //constructor does not return until the client connects to it- this will be implemented on separate thread later
-            simple_udp_server_provider(int desired_port);
+            explicit simple_udp_server_provider(int desired_port);
             
             //not implemented ATM, check needed to see what resources (if any) need to be released
             // virtual void ~simple_udp_server_provider();     

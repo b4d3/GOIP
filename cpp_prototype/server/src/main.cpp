@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-#include <boost/array.hpp>
-#include <boost/asio.hpp>
 #include "../include/simple_udp_server_provider.h"
 
 using boost::asio::ip::udp;
