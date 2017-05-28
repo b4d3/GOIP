@@ -40,7 +40,7 @@ void simple_udp_server_provider::expect_message_infinite_loop() {
     boost::array<char, 128> recv_buf;
     while (true) {
         size_t len = socket->receive(boost::asio::buffer(recv_buf));
-        std::cout.write(recv_buf.data(), len);
+        received_message_callback_function(recv_buf, len);
     }
   
 }
