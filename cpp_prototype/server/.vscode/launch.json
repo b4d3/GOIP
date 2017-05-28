@@ -6,7 +6,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/build/bin/server",
+            "program": "${workspaceRoot}/build/bin/udp-server",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
@@ -24,7 +24,7 @@
             "name": "Debug",
             "type": "gdb",
             "request": "launch",
-            "target": "${workspaceRoot}/build/bin/server",
+            "target": "${workspaceRoot}/build/bin/udp-server",
             "cwd": "${workspaceRoot}"
         }
     ]

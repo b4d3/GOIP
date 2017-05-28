@@ -11,8 +11,12 @@ simple_udp_client::simple_udp_client(std::string ip_v4_address, int port_number)
     
     std::cout <<"Called the simple_udp_client constructor. The server is located at " <<ip_v4_address <<":" <<port_number << std::endl;
     boost::asio::ip::address a = boost::asio::ip::address::from_string(ip_v4_address);
-    endpoint = new boost::asio::ip::udp::endpoint(a, port_number);
-    socket->connect(*endpoint);
+    remote_endpoint = new boost::asio::ip::udp::endpoint(a, port_number);
+    socket->connect(*remote_endpoint);
+
+    //sending an initial empty message because the server needs it to set its remote_endpoint
+    //this logic needs to be checked later, and likely fixed
+    send_message("");
 }
 
 simple_udp_client::~simple_udp_client() {
@@ -21,7 +25,6 @@ simple_udp_client::~simple_udp_client() {
 
 void simple_udp_client::send_message(std::string message) {
     socket->send(boost::asio::buffer(message));
-    expect_and_print_message();
 }
 
 void simple_udp_client::expect_and_print_message() {

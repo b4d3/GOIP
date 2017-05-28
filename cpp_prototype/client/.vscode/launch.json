@@ -5,10 +5,10 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "build/bin/server",
+            "program": "build/bin/udp-client",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "workspaceRoot",
+            "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": true,
             "setupCommands": [
@@ -23,7 +23,7 @@
             "name": "Debug",
             "type": "gdb",
             "request": "launch",
-            "target": "build/bin/server",
+            "target": "build/bin/udp-client",
             "cwd": "${workspaceRoot}"
         }
     ]
