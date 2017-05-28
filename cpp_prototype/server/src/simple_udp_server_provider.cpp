@@ -2,6 +2,7 @@
 #include <iostream>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
+#include <functional>
 
 using namespace goip;
 
@@ -23,21 +24,42 @@ simple_udp_server_provider::simple_udp_server_provider(int desired_port):
     boost::array<char, 1> recv_buf;
     socket->receive_from(boost::asio::buffer(recv_buf), *remote_endpoint);
     socket->connect(*remote_endpoint);
+    sync_receiver_thread = new std::thread(std::bind(&simple_udp_server_provider::expect_message_infinite_loop, this));    
+}
+
+simple_udp_server_provider::~simple_udp_server_provider() {
+    //this line will cause the program to run in an infinite loop
+    sync_receiver_thread->join();
 }
 
 void simple_udp_server_provider::send_message_to_client(std::string message) {
     socket->send(boost::asio::buffer(message));
 }
 
-void simple_udp_server_provider::expect_message() {
+void simple_udp_server_provider::expect_message_infinite_loop() {
     boost::array<char, 128> recv_buf;
-    size_t len = socket->receive(boost::asio::buffer(recv_buf));
-    std::cout.write(recv_buf.data(), len);
+    while (true) {
+        size_t len = socket->receive(boost::asio::buffer(recv_buf));
+        std::cout.write(recv_buf.data(), len);
+    }
   
 }
+void simple_udp_server_provider::expect_and_print_a_single_message() {
+    boost::array<char, 128> recv_buf;
+    size_t len = socket->receive(boost::asio::buffer(recv_buf));
+    received_message_callback_function(recv_buf, len);
+    // std::cout.write(recv_buf.data(), len);
+}
+
 
 void simple_udp_server_provider::async_wait_for_message() {
     boost::array<char, 128> recv_buf;
-    socket->async_receive(boost::asio::buffer(recv_buf), handler);
+    while (true) {
+        socket->async_receive(boost::asio::buffer(recv_buf), handler);
+        io_service->run();
+    }    
 }
 
+void simple_udp_server_provider::register_a_callback_function(std::function<void(boost::array<char, 128>, size_t)> callback_function) {
+    received_message_callback_function = callback_function;
+}

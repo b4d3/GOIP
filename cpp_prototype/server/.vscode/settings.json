@@ -2,6 +2,7 @@
     "files.associations": {
         "*.ipp": "cpp",
         "system_error": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "thread": "cpp"
     }
 }
