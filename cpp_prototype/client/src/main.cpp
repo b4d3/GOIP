@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[])
 {
-  goip::simple_udp_client udp_client("127.0.0.1", 2031);
+  goip::simple_udp_client udp_client("52.14.208.77", 12345);
   udp_client.register_a_callback_function(callback_for_received_messages);
 
   char message[100];
