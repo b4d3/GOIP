@@ -38,6 +38,7 @@ class SoundRecorder(outputStream: OutputStream) {
   }
 
   def stop(): Unit = {
+
     stopped = true
 
     if (outputStream != null) {
@@ -49,4 +50,5 @@ class SoundRecorder(outputStream: OutputStream) {
       audioLine.close()
     }
   }
+
 }

@@ -21,19 +21,32 @@ class SoundPlayer(inputStream: InputStream) {
     stopped = false
     audioLine.open()
     audioLine.start()
-    var numBytesRead = inputStream.read(audioBytes)
+    var numBytesRead: Int = 0
+
+    try {
+      numBytesRead = inputStream.read(audioBytes)
+    } catch {
+      case e: SocketException => {
+        println("No connection")
+        return
+      }
+    }
 
     while (!stopped && numBytesRead != -1) {
       audioLine.write(audioBytes, 0, numBytesRead)
       try {
         numBytesRead = inputStream.read(audioBytes)
       } catch {
-        case e: SocketException => println("Closed connection")
+        case e: SocketException => {
+          println("Closed connection")
+          return
+        }
       }
     }
   }
 
   def stop(): Unit = {
+
     stopped = true
 
     if (audioLine != null) {
