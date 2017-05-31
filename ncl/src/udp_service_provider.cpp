@@ -45,7 +45,9 @@ void udp_service_provider::terminate_input_message_loop() {
 void udp_service_provider::infinite_message_loop() {
     std::array<char, 120> buffer;
     while (loop_running) {
-        size_t len = socket->receive_from(boost::asio::buffer(buffer), *remote_endpoint);
+        std::cout << "In the loop" << std::endl;
+        //size_t len = socket->receive_from(boost::asio::buffer(buffer), *remote_endpoint);
+        size_t len = socket->receive(boost::asio::buffer(buffer));
         std::string message(buffer.data(), len);
         callback(message);
     }
