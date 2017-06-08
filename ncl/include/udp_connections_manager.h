@@ -40,6 +40,7 @@ namespace goip {
 
         private:
             boost::asio::io_service* io_service; 
+            boost::asio::ip::udp::endpoint *local_endpoint;
             boost::asio::ip::udp::socket* socket;
             std::vector<udp_service_provider*> peer_list;
     };

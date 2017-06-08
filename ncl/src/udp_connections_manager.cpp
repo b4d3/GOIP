@@ -5,10 +5,9 @@ using namespace goip;
 
 udp_connections_manager::udp_connections_manager():
     io_service{new boost::asio::io_service()},
-    socket {new boost::asio::ip::udp::socket(*io_service)} {
+    //local_endpoint {new boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 49208)},
+    socket {new boost::asio::ip::udp::socket(*io_service)} { //, *local_endpoint)} {
     
-    boost::asio::ip::udp::endpoint *local_endpoint = new boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("127.0.0.1"), 3479);
-    socket->bind(*local_endpoint);
 
 }
 udp_connections_manager::~udp_connections_manager() {

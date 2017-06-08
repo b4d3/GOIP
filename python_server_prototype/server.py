@@ -1,11 +1,20 @@
 #A small python server program that excanges the data between peers!
 
-import socket               
+import socket    
 
 def get_data(socket, client):
     message, address = s.recvfrom(1024)
     client.append(address)
     print(client)
+
+
+def infinite_message_router(s, peers):
+    while True:
+        message, address = s.recvfrom(1024)
+        if address != peers[0]:
+            s.sendto(message, peers[0])
+        else:
+            s.sendto(message, peers[0])
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)        
 host = socket.gethostname() 
@@ -17,11 +26,14 @@ peers = []
 get_data(s, peers)
 get_data(s, peers)
 
-print (peers[0])
-print (peers[1])
+infinite_message_router(s, peers)
 
-s.sendto(str(peers[0]) + "\n", peers[1])
-s.sendto(str(peers[1]) + "\n", peers[0])
+
+#print (peers[0])
+#print (peers[1])
+
+#s.sendto(str(peers[0]) + "\n", peers[1])
+#s.sendto(str(peers[1]) + "\n", peers[0])
 
 
 

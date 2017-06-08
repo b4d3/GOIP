@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "array": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "thread": "cpp"
     }
 }

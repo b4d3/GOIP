@@ -5,37 +5,31 @@
 #include "../include/udp_service_provider.h"
 
 
+void helper_printer(const std::string& message) {
+    std::cout << "Got the following message:\n\t" << message << std::endl;
+}
+
 int main() {
     
     goip::udp_connections_manager ucm;
-    int server_peer_id = ucm.add_new_peer("52.14.208.77", 12346);
-    std::string peer_ip;
-    std::string peer_port;
-    ucm.expect_single_message_from_peer(server_peer_id, [&](const std::string& message) {
-        std::cout <<message << std::endl;
-        peer_ip = message;
-        });
+    int server_peer_id = ucm.add_new_peer("52.14.208.77", 12345);
+    std::string server_message = "ERROR!";
 
-    ucm.expect_single_message_from_peer(server_peer_id, [&](const std::string& message) {
-        std::cout <<message << std::endl;
-        peer_port = message;
-        });
+    while (server_message != "Connection to peer established!") {
+        ucm.expect_single_message_from_peer(server_peer_id, [&](const std::string& message) {
+            std::cout <<message << std::endl;
+            server_message = message;
+            });
+    }
 
-    int port_number = std::stoi(peer_port);
-    peer_ip.erase(peer_ip.length()-1);
-    std::cout <<"my peer is " << peer_ip << ":" << port_number << std::endl;
+    ucm.start_peer_message_loop(server_peer_id, helper_printer);
+
+    std::string message_for_peer = "Hello!";
+    ucm.send_message_to_peer(server_peer_id, message_for_peer);
+        
     
-    int peer_id = ucm.add_new_peer(peer_ip, port_number);
-    ucm.start_peer_message_loop(peer_id, [](const std::string& message){std::cout << message << std::endl;});
+    while(true) {
+    }
 
-    long counter = 0;
-    while(1) {
-        if (counter%10000==0)
-            ucm.send_message_to_peer(peer_id, "ivanova___poruka\n"); 
-        counter++;
-        }
-    
-
-    
     return 0;
 }
