@@ -3,15 +3,23 @@
 
 using namespace goip;
 
-udp_connections_manager::udp_connections_manager():
+udp_connections_manager::udp_connections_manager(int local_port):
     io_service{new boost::asio::io_service()},
-    //local_endpoint {new boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 49208)},
-    socket {new boost::asio::ip::udp::socket(*io_service)} { //, *local_endpoint)} {
+    local_endpoint {new boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), local_port)},
+    socket {new boost::asio::ip::udp::socket(*io_service, *local_endpoint)} {
     
+    //add error handling for when the port is taken!
 
 }
+
+//check if this destruction of vector elements is OK
 udp_connections_manager::~udp_connections_manager() {
-    //to be implemented
+    for (auto element : peer_list) {
+        delete element;
+    }
+    delete io_service;
+    delete local_endpoint;
+    delete socket;
 }
 
 int udp_connections_manager::add_new_peer(const std::string& peer_ip_address, int peer_port_number) {

@@ -5,6 +5,7 @@
             "ip_address" : "52.14.208.77",
             "port" : 12345
         },
-        "local_udp_port" : 56784
+        "local_udp_port" : 56712,
+        "udp_package_size" : 1024
     }
 }

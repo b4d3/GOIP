@@ -12,7 +12,7 @@ void helper_printer(const std::string& message) {
 int main() {
     goip::configuration_reader config_reader;
     config_reader.test_print();
-    goip::udp_connections_manager ucm;
+    goip::udp_connections_manager ucm(config_reader.get_local_port());
     int server_peer_id = ucm.add_new_peer(config_reader.get_central_server_ip_address(), config_reader.get_central_server_port());
     std::string server_message = "ERROR!";
 

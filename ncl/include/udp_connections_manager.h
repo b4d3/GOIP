@@ -14,7 +14,7 @@ namespace goip {
     class udp_connections_manager {
         public:
             //creates a local socket that will be used by all the peers registered to this udp_connections_manager
-            udp_connections_manager();
+            udp_connections_manager(int local_port);
 
             //RAII stuff
             virtual ~udp_connections_manager();
