@@ -1,18 +1,19 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include "../include/udp_connections_manager.h"
-#include "../include/udp_service_provider.h"
-
+#include <udp_connections_manager.h>
+#include <udp_service_provider.h>
+#include <configuration_reader.h>
 
 void helper_printer(const std::string& message) {
     std::cout << "Got the following message:\n\t" << message << std::endl;
 }
 
 int main() {
-    
+    goip::configuration_reader config_reader;
+    config_reader.test_print();
     goip::udp_connections_manager ucm;
-    int server_peer_id = ucm.add_new_peer("52.14.208.77", 12345);
+    int server_peer_id = ucm.add_new_peer(config_reader.get_central_server_ip_address(), config_reader.get_central_server_port());
     std::string server_message = "ERROR!";
 
     while (server_message != "Connection to peer established!") {

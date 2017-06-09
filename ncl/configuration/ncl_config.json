@@ -1,0 +1,10 @@
+{
+    "ncl" : {
+        "use_tcp_locally" : false,
+        "central_server_information" : {
+            "ip_address" : "52.14.208.77",
+            "port" : 12345
+        },
+        "local_udp_port" : 56784
+    }
+}
