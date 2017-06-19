@@ -17,6 +17,30 @@ udp_service_provider::udp_service_provider(boost::asio::io_service* io_service, 
                     }
                     send_message_to_peer("");
                 }
+udp_service_provider::udp_service_provider(boost::asio::io_service* io_service, boost::asio::ip::udp::socket* socket, std::string expected_message) :
+                io_service {io_service}, socket{socket}, 
+                remote_endpoint{new boost::asio::ip::udp::endpoint()}, 
+                loop_running {false} {
+
+                    std::cout <<"Got to this point!!!" << std::endl;
+                    bool peer_found = false;
+                    
+                    while (!peer_found) {
+                        std::array<char, 1024> receive_buffer;
+                        std::cout <<"Got here before the problem!" << std::endl;
+                        size_t len = socket->receive_from(boost::asio::buffer(receive_buffer), *remote_endpoint, 0);
+
+                        std::string temp_object (receive_buffer.data(), len);
+
+                        std::cout <<"Got the following message while trying to bind with local peer: " << temp_object << std::endl;
+                        
+
+                        if (temp_object == expected_message) {
+                            peer_found = true;
+                            std::cout <<"Found the peer!" << std::endl;
+                        }
+                    }
+}
 
 udp_service_provider::~udp_service_provider() {
     terminate_input_message_loop();
@@ -70,7 +94,6 @@ void udp_service_provider::infinite_message_loop() {
     std::array<char, 120> buffer;
     while (loop_running) {
         try {
-            std::cout << "In the loop" << std::endl;
             size_t len = socket->receive(boost::asio::buffer(buffer));
             std::string message(buffer.data(), len);
             callback(message);

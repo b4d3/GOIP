@@ -12,6 +12,15 @@ udp_connections_manager::udp_connections_manager(int local_port):
 
 }
 
+udp_connections_manager::udp_connections_manager():
+    io_service{new boost::asio::io_service()},
+    local_endpoint {new boost::asio::ip::udp::endpoint()},
+    socket {new boost::asio::ip::udp::socket(*io_service)} {
+    
+    //add error handling
+
+}
+
 //check if this destruction of vector elements is OK
 udp_connections_manager::~udp_connections_manager() {
     for (auto element : peer_list) {
@@ -27,8 +36,23 @@ int udp_connections_manager::add_new_peer(const std::string& peer_ip_address, in
     return peer_list.size() - 1;
 }
 
+int udp_connections_manager::add_new_peer(std::string& expected_message) {
+    peer_list.push_back(new udp_service_provider(io_service, socket, expected_message));
+    std::cout <<"Added a new local peer!" << std::endl;
+    std::cout <<"Peer list size now is " << peer_list.size();
+    return peer_list.size() - 1;
+}
+
 void udp_connections_manager::send_message_to_peer(int peer_number, const std::string& message) {
     peer_list[peer_number]->send_message_to_peer(message);
+}
+
+void udp_connections_manager::send_message_to_all(const std::string& message) {
+    std::cout <<"Number of peers is " << peer_list.size() << std::endl;
+    for (auto peer : peer_list) {
+        std::cout <<"Peer found here!" << std::endl;
+        peer->send_message_to_peer(message);
+    }
 }
 
 void udp_connections_manager::expect_single_message_from_peer(int peer_number, std::function<void(const std::string&)> callback_function) {

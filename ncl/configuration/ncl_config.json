@@ -1,11 +1,16 @@
 {
     "ncl" : {
+        
         "use_tcp_locally" : false,
         "central_server_information" : {
             "ip_address" : "52.14.208.77",
             "port" : 12345
         },
-        "local_udp_port" : 56712,
-        "udp_package_size" : 1024
+
+        "local_connection_information" : {
+            "local_udp_port" : 56712,
+            "connection_establishment_message" : "init_connection",
+            "udp_package_size" : 1024
+        }
     }
 }

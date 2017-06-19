@@ -14,7 +14,10 @@ namespace goip {
     class udp_connections_manager {
         public:
             //creates a local socket that will be used by all the peers registered to this udp_connections_manager
-            udp_connections_manager(int local_port);
+            explicit udp_connections_manager(int local_port);
+
+            //binds the application to a random port - use this when acting like client
+            udp_connections_manager();
 
             //RAII stuff
             virtual ~udp_connections_manager();
@@ -25,8 +28,14 @@ namespace goip {
             //this will later be turned into a key-value map
             int add_new_peer(const std::string& peer_ip_address, int peer_port_number);
 
+            //blocks until it adds a new peer that sends the expected message!
+            int add_new_peer(std::string& expected_message);
+
             //sends a message to the peer with the given id
             void send_message_to_peer(int peer_number, const std::string& message);
+
+            //send the message to all connected peers
+            void send_message_to_all(const std::string& message);
 
             //blocks and waits for a single message from a given peer
             //after that, a callback is called on this thread and then the control is returned to the caller

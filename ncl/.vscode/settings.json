@@ -3,6 +3,9 @@
         "array": "cpp",
         "*.ipp": "cpp",
         "thread": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "slist": "cpp",
+        "initializer_list": "cpp",
+        "utility": "cpp"
     }
 }

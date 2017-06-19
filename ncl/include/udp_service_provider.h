@@ -17,6 +17,10 @@ namespace goip {
             udp_service_provider(boost::asio::io_service* io_service, boost::asio::ip::udp::socket* socket,
                 const std::string& peer_ipv4_address, int peer_port_number);
 
+            //this constructor blocks until it connects to a client that sends the expected_message
+            udp_service_provider(boost::asio::io_service* io_service, boost::asio::ip::udp::socket* socket, std::string expected_message);
+
+
             //RAII for all the resources
             virtual ~udp_service_provider();
 

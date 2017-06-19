@@ -22,12 +22,16 @@ namespace goip {
             std::string get_central_server_ip_address();
             int get_central_server_port();
             int get_local_port();
-            void test_print();
+            std::string get_connection_establishment_message();
+            int get_udp_package_size();
+            void print_configuration();
 
         private:
             std::string central_server_ip_address;
+            std::string connection_establishment_string;
             bool use_tcp_locally_enabled;
             int central_server_port;
             int local_port;
+            int udp_package_size;
     };
 }
