@@ -6,38 +6,40 @@
 #include <configuration_reader.h>
 #include <utils.h>
 
+using namespace goip;
+
 int main()
 {
-
-    goip::configuration_reader config_reader;
+    //provide no filename so that the defualt configuration file is used
+    configuration_reader config_reader;
     config_reader.print_configuration();
-    goip::udp_connections_manager local_ucm(config_reader.get_local_port());
-    goip::udp_connections_manager ucm;
 
-    //establishes the connection to the main server
+    //creates the udp_connection_manager that listens on a local port which is set in the configuration
+    udp_connections_manager local_ucm(config_reader.get_local_port());
+    udp_connections_manager ucm;
+
+    //establishes the connection to the central server
     //does not return until both clients are connected to the server
     int server_peer_id;
     establish_connection_to_server(ucm, config_reader, server_peer_id);
+
+    //register a lambda which routes the message received from the central client to the local peer
     ucm.start_peer_message_loop(server_peer_id, [&](const std::string &message) {
-        std::cout << "In the callback!" << std::endl;
         local_ucm.send_message_to_all(message);
     });
 
-    //allows the local client to connect, this client will get all the messages
-    //from the central server
+    //connect to the local client by receiving an expected message from it (this message is also set in configuration)
     std::string expected_message = config_reader.get_connection_establishment_message();
     int local_id = local_ucm.add_new_peer(expected_message);
 
-    //sends the message to the main server (which then routes it to the other client)
+    //sends 10 messages to the main server (which then routes them to the other client)
     std::string message_for_peer = "Hello!";
-    ucm.send_message_to_peer(server_peer_id, message_for_peer);
-
     for (int i = 0; i < 10; i++)
     {
-        std::cout << "Sending a message to remote peer!" << std::endl;
         ucm.send_message_to_peer(server_peer_id, message_for_peer);
     }
 
+    //make sure the application doesn't exit
     while (true)
     {
     }
