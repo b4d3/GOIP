@@ -5,9 +5,9 @@ import play.api.libs.json.{JsValue, Json}
 
 import scala.io.Source
 
-object ConfigurationProvider {
+class ConfigurationProvider(configFile: String) {
 
-  private val jsonFile = Source.fromFile("../config/config.json").mkString
+  private val jsonFile = Source.fromFile(configFile).mkString
   private val json: JsValue = Json.parse(jsonFile)
 
   def getLocalPort: Int = {

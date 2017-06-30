@@ -1,3 +1,4 @@
+import java.io.{InputStream, OutputStream}
 import java.net.{InetAddress, Socket}
 
 /**
@@ -5,11 +6,11 @@ import java.net.{InetAddress, Socket}
   */
 class Peer {
 
-  val port = ConfigurationProvider.getLocalPort
+  val port: Int = new ConfigurationProvider("../config/config.json").getLocalPort
   val socket = new Socket(InetAddress.getByName("localhost"), port)
 
-  val in = socket.getInputStream
-  val out = socket.getOutputStream
+  val in: InputStream = socket.getInputStream
+  val out: OutputStream = socket.getOutputStream
 
   val soundPlayer = new SoundPlayer(in)
   val soundRecorder = new SoundRecorder(out)
@@ -24,12 +25,12 @@ class Peer {
     (playerThread, recorderThread)
   }
 
-  def stopConversation = {
+  def stopConversation(): Unit = {
     soundRecorder.stop()
     soundPlayer.stop()
   }
 
-  def shutdown: Unit = {
+  def shutdown(): Unit = {
     in.close()
     out.close()
   }
