@@ -3,7 +3,7 @@ set(TARGET_APPLICATION_NAME "ncl")
 set(HEADERS_DIRECTORY "include")
 set(SOURCES_DIRECTORY "src")
 set(BUILD_DIRECTORY "build")
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 ###########################################
 
 project(network_connectivity_layer)

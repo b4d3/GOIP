@@ -8,7 +8,7 @@
         },
 
         "local_connection_information" : {
-            "local_udp_port" : 56719,
+            "local_udp_port" : 56712,
             "connection_establishment_message" : "init_connection",
             "udp_package_size" : 1024
         }

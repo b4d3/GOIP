@@ -4,9 +4,9 @@
 
 using namespace goip;
 
-udp_service_provider::udp_service_provider(boost::asio::io_service *io_service, boost::asio::ip::udp::socket *socket,
+udp_service_provider::udp_service_provider(std::shared_ptr<boost::asio::io_service> io_service, std::shared_ptr<boost::asio::ip::udp::socket> socket,
                                            const std::string &peer_ipv4_address, int peer_port_number) : io_service{io_service}, socket{socket},
-                                                                                                         remote_endpoint{new boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(peer_ipv4_address), peer_port_number)},
+                                                                                                         remote_endpoint{std::make_unique<boost::asio::ip::udp::endpoint>(boost::asio::ip::address::from_string(peer_ipv4_address), peer_port_number)},
                                                                                                          loop_running{false}
 {
     boost::system::error_code ec;
@@ -18,7 +18,7 @@ udp_service_provider::udp_service_provider(boost::asio::io_service *io_service, 
     }
     send_message_to_peer("");
 }
-udp_service_provider::udp_service_provider(boost::asio::io_service *io_service, boost::asio::ip::udp::socket *socket, std::string expected_message) : io_service{io_service}, socket{socket},
+udp_service_provider::udp_service_provider(std::shared_ptr<boost::asio::io_service> io_service, std::shared_ptr<boost::asio::ip::udp::socket> socket, std::string expected_message) : io_service{io_service}, socket{socket},
                                                                                                                                                       remote_endpoint{new boost::asio::ip::udp::endpoint()},
                                                                                                                                                       loop_running{false}
 {
@@ -47,8 +47,6 @@ udp_service_provider::~udp_service_provider()
 {
     terminate_input_message_loop();
     message_receiver_thread->join();
-    delete message_receiver_thread;
-    delete remote_endpoint;
     //socket and io_service don't belong to this class, they should get deleted somewhere else
 }
 
@@ -92,7 +90,7 @@ void udp_service_provider::start_input_message_loop(std::function<void(const std
 {
     loop_running = true;
     callback = callback_function;
-    message_receiver_thread = new std::thread(std::bind(&udp_service_provider::infinite_message_loop, this));
+    message_receiver_thread = std::make_unique<std::thread>(std::bind(&udp_service_provider::infinite_message_loop, this));
 }
 
 void udp_service_provider::terminate_input_message_loop()
