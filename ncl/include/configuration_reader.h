@@ -20,13 +20,13 @@ class configuration_reader
     //tcp support not added yet!
     //this is for the communication between this api and its user
     //not this api and central server
-    bool use_tcp_locally();
-    std::string get_central_server_ip_address();
-    int get_central_server_port();
-    int get_local_port();
-    std::string get_connection_establishment_message();
-    int get_udp_package_size();
-    void print_configuration();
+    bool use_tcp_locally() const;
+    std::string get_central_server_ip_address() const;
+    int get_central_server_port() const;
+    int get_local_port() const;
+    std::string get_connection_establishment_message() const;
+    int get_udp_package_size() const;
+    void print_configuration() const;
 
   private:
     std::string central_server_ip_address;

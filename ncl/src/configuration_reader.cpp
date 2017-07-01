@@ -21,33 +21,33 @@ configuration_reader::~configuration_reader()
     //also, all of its mem-vars are allocated on stack, so no pointers need to be freed
 }
 
-bool configuration_reader::use_tcp_locally()
+bool configuration_reader::use_tcp_locally() const
 {
     //hardcoded until tcp support is added
     return false;
 }
 
-std::string configuration_reader::get_central_server_ip_address()
+std::string configuration_reader::get_central_server_ip_address() const
 {
     return central_server_ip_address;
 }
 
-int configuration_reader::get_central_server_port()
+int configuration_reader::get_central_server_port() const
 {
     return central_server_port;
 }
 
-int configuration_reader::get_local_port()
+int configuration_reader::get_local_port() const
 {
     return local_port;
 }
 
-std::string configuration_reader::get_connection_establishment_message()
+std::string configuration_reader::get_connection_establishment_message() const
 {
     return connection_establishment_string;
 }
 
-void configuration_reader::print_configuration()
+void configuration_reader::print_configuration() const
 {
     std::cout << "\n###### NCL configuration ######" << std::endl;
     std::cout << "This is the configuration..." << std::endl;

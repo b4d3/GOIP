@@ -29,7 +29,6 @@ udp_service_provider::udp_service_provider(boost::asio::io_service *io_service, 
     while (!peer_found)
     {
         std::array<char, 1024> receive_buffer;
-        std::cout << "Got here before the problem!" << std::endl;
         size_t len = socket->receive_from(boost::asio::buffer(receive_buffer), *remote_endpoint, 0);
 
         std::string temp_object(receive_buffer.data(), len);

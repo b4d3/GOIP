@@ -37,7 +37,7 @@ int udp_connections_manager::add_new_peer(const std::string &peer_ip_address, in
     return peer_list.size() - 1;
 }
 
-int udp_connections_manager::add_new_peer(std::string &expected_message)
+int udp_connections_manager::add_new_peer(const std::string &expected_message)
 {
     peer_list.push_back(new udp_service_provider(io_service, socket, expected_message));
     std::cout << "Added a new local peer!" << std::endl;

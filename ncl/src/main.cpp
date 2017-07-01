@@ -32,12 +32,14 @@ int main()
     std::string expected_message = config_reader.get_connection_establishment_message();
     int local_id = local_ucm.add_new_peer(expected_message);
 
-    //sends 10 messages to the main server (which then routes them to the other client)
-    std::string message_for_peer = "Hello!";
-    for (int i = 0; i < 10; i++)
-    {
-        ucm.send_message_to_peer(server_peer_id, message_for_peer);
-    }
+    //register a lambda which routes the message received from local client to the central server
+    local_ucm.start_peer_message_loop(local_id, [&](const std::string &message) {
+        ucm.send_message_to_peer(server_peer_id, message);
+    });
+
+    //establish connection with the local client - temporary fi
+    //std::string message_for_peer = "Establish connection!";
+    //ucm.send_message_to_peer(server_peer_id, message_for_peer);
 
     //make sure the application doesn't exit
     while (true)

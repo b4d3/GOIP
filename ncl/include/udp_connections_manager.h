@@ -31,7 +31,7 @@ class udp_connections_manager
     int add_new_peer(const std::string &peer_ip_address, int peer_port_number);
 
     //blocks until it adds a new peer that sends the expected message!
-    int add_new_peer(std::string &expected_message);
+    int add_new_peer(const std::string &expected_message);
 
     //sends a message to the peer with the given id
     void send_message_to_peer(int peer_number, const std::string &message);
