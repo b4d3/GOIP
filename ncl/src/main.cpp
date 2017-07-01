@@ -37,10 +37,6 @@ int main()
         ucm.send_message_to_peer(server_peer_id, message);
     });
 
-    //establish connection with the local client - temporary fi
-    //std::string message_for_peer = "Establish connection!";
-    //ucm.send_message_to_peer(server_peer_id, message_for_peer);
-
     //make sure the application doesn't exit
     while (true)
     {
