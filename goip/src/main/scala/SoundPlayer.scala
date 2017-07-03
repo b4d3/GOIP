@@ -5,6 +5,10 @@ import javax.sound.sampled._
 /**
   * Created by bade on 20.05.17..
   */
+/**
+  * Reproduces the audio stream
+  * @param inputStream Input stream where the audio data is read from
+  */
 class SoundPlayer(inputStream: InputStream) {
 
   private val format = SoundUtil.getAudioFormat
@@ -16,18 +20,27 @@ class SoundPlayer(inputStream: InputStream) {
 
   private val audioLine = AudioSystem.getSourceDataLine(format)
 
+  /**
+    * Starts reproducing audio data got from input stream
+    * @todo Maybe calling this method when pressing a 'play' button on GUI
+    */
   def start(): Unit = {
 
     stopped = false
+
+    // Opens the audio line (acquires required resources), but starts playing only on start() method
     audioLine.open()
+
+    // Starts reproducing a sound
     audioLine.start()
+
     var numBytesRead: Int = 0
 
     try {
       numBytesRead = inputStream.read(audioBytes)
     } catch {
       case e: SocketException => {
-        println("No connection")
+        println("No connection: " + e.getMessage)
         return
       }
     }
@@ -38,19 +51,26 @@ class SoundPlayer(inputStream: InputStream) {
         numBytesRead = inputStream.read(audioBytes)
       } catch {
         case e: SocketException => {
-          println("Closed connection")
+          println("Closed connection: " + e.getMessage)
           return
         }
       }
     }
   }
 
+  /**
+    * Stops reproducing the sound. Safe to call start() again
+    * @todo Maybe calling this method by pressing a 'stop' or 'close' button on GUI
+    */
   def stop(): Unit = {
 
     stopped = true
 
     if (audioLine != null) {
+      // Make sure the drain() method is called after the input stream has been called!
+      // Otherwise, causes thread starvation!
       audioLine.drain()
+
       audioLine.close()
     }
   }

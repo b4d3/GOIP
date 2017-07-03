@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
   */
 class ConfigurationProviderTest extends FunSuite {
 
-  test("A function should parse the port number") {
+  test("A function should parse and return the port number") {
 
     val port = new ConfigurationProvider("./src/test/resources/config.json").getLocalPort
 

@@ -5,6 +5,10 @@ import javax.sound.sampled._
 /**
   * Created by bade on 21.05.17..
   */
+/**
+  * Records the sound obtained from line-in (microphone) and sends audio data to output stream
+  * @param outputStream Output stream that the recorded audio data is sent to
+  */
 class SoundRecorder(outputStream: OutputStream) {
 
   private val format = SoundUtil.getAudioFormat
@@ -16,10 +20,18 @@ class SoundRecorder(outputStream: OutputStream) {
 
   private val audioLine = AudioSystem.getTargetDataLine(format)
 
+  /**
+    * Starts recording audio data got from line-in (microphone)
+    * @todo Maybe calling this method when pressing a 'play' button on GUI
+    */
   def start(): Unit = {
 
     stopped = false
+
+    // Opens the audio line (acquires required resources), but starts recording only on start() method
     audioLine.open()
+
+    // Starts recording a sound
     audioLine.start()
 
     var numBytesRead = audioLine.read(audioBytes, 0, SoundUtil.BUFFER_SIZE)
@@ -29,7 +41,7 @@ class SoundRecorder(outputStream: OutputStream) {
         outputStream.write(audioBytes)
       } catch {
         case e: SocketException => {
-          println("Closed connection")
+          println("Closed connection: " + e.getMessage)
           stop()
         }
       }
@@ -37,6 +49,10 @@ class SoundRecorder(outputStream: OutputStream) {
     }
   }
 
+  /**
+    * Stops recording the sound. Safe to call start() again
+    * @todo Maybe calling this method by pressing a 'stop' or 'close' button on GUI
+    */
   def stop(): Unit = {
 
     stopped = true

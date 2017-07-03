@@ -5,7 +5,7 @@ object SoundUtil {
   val BUFFER_SIZE = 4096
 
   /**
-    * Defines a default audio format used to record
+    * Defines a default audio format used to record a sound
     */
   def getAudioFormat: AudioFormat = {
     val sampleRate = 44100
